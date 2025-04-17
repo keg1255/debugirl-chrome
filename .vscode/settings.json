@@ -1,0 +1,16 @@
+{
+  // 自动检测文件编码
+  "files.autoGuessEncoding": true,
+  // 不监听这些文件的变化
+  "files.watcherExclude": {
+    "public/vs": true,
+    "public/js/monaco": true
+  },
+  // 不搜索这些目录
+  "search.exclude": {
+    "public/vs": true,
+    "public/js/monaco": true
+  },
+  // 同步代码时不使用rebase，虽然rebase大部分情况rebase很好，但是合并其它分支时用rebase会出现问题
+  "git.rebaseWhenSync": false
+}

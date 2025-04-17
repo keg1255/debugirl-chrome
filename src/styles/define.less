@@ -1,0 +1,439 @@
+@import "./appdefine.less";
+
+/* 禁止选中 */
+.noselect() {
+	-webkit-touch-callout: none;
+	user-select: none;
+}
+
+.ellipsis() {
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	word-wrap: break-word;
+}
+
+.ellipsis-n(@line: 1) {
+	white-space: normal;
+	word-break: break-all;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: @line;
+	-webkit-box-orient: vertical;
+}
+
+.fixed-full() {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+
+.flex-center() {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.abs-full() {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+
+.reddot() {
+	position: relative;
+	display: inline-block;
+	padding-right: 0.35em;
+
+	&::after {
+		display: inline-block;
+		content: " ";
+		position: absolute;
+		right: 0.05em;
+		top: 0.2em;
+		overflow: hidden;
+		width: 0.35em;
+		height: 0.35em;
+		background: #f00;
+		border: 1px solid #fff;
+		border-radius: 0.5em;
+	}
+}
+
+.hover-color(@hover) {
+	cursor: pointer;
+
+	&:hover {
+		color: @hover;
+	}
+}
+
+.select-style() {
+	width: 100%;
+	height: 2.063rem;
+	padding: 0.313rem 0.75rem;
+	background-color: #fff;
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+	border-radius: 0.188rem;
+
+	&:focus {
+		border-color: @primary;
+		box-shadow: 0 0 0.5rem rgba(102, 175, 233, 0.6);
+	}
+}
+
+.space-x(@x: 1em) {
+	> * {
+		margin-right: @x;
+		&:last-child {
+			margin-right: 0;
+		}
+	}
+}
+
+.space-y(@x: 1em) {
+	> * {
+		margin-bottom: @x;
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+}
+
+.radius-btn(@width, @height) {
+	min-width: @width;
+	height: @height;
+	border-radius: @height / 4;
+}
+
+// 文字高亮链接
+.magic-link(@active: @primary, @cc: fade(@active, 70%)) {
+	cursor: pointer;
+
+	&:hover {
+		color: @cc;
+	}
+
+	&.router-link-active,
+	&.nuxt-link-active,
+	&.active {
+		color: @active;
+	}
+
+	&:disabled,
+	&.disabled {
+		color: inherit;
+		opacity: 0.65;
+		cursor: not-allowed;
+	}
+}
+
+.magic-bg-link-color(@active) when (lightness(@active) >=80%) {
+	color: #000;
+}
+.magic-bg-link-color(@active) when (lightness(@active) < 80%) {
+	color: #fff;
+}
+
+// 背景高亮链接
+.magic-bg-link(@active: @primary, @cc: fade(@active, 70%)) {
+	background-color: inherit;
+	cursor: pointer;
+
+	&:hover {
+		background-color: @cc;
+		.magic-bg-link-color(@active);
+	}
+
+	&.router-link-active,
+	&.nuxt-link-active,
+	&.active {
+		background-color: @active;
+		.magic-bg-link-color(@active);
+	}
+
+	&:disabled,
+	&.disabled {
+		opacity: 0.65;
+		cursor: not-allowed;
+	}
+}
+
+//#region 文字和边框高亮按钮
+.magic-btn(@active: @primary, @cc: fade(@active, 70% )) when (lightness(@active) >=80%) {
+	background-color: #000;
+}
+
+.magic-btn(@active: @primary, @cc: fade(@active, 70% )) when (lightness(@active) < 80%) {
+	background-color: #fff;
+}
+
+.magic-btn(@active: @primary, @cc: fade(@active, 70% )) {
+	color: @active;
+	border: 1px solid @active;
+	cursor: pointer;
+
+	&:hover {
+		color: @cc;
+		border-color: @cc;
+	}
+
+	&:disabled,
+	&.disabled {
+		opacity: 0.65;
+		cursor: not-allowed;
+	}
+}
+//#endregion
+
+//#region 背景高亮按键
+.magic-bg-btn(@bg: @primary) when (lightness(@bg) >=80%) {
+	color: #000;
+}
+
+.magic-bg-btn(@bg: @primary) when (lightness(@bg) < 80%) {
+	color: #fff;
+}
+
+.magic-bg-btn(@active: @primary, @cc: fade(@active, 80%)) {
+	background-color: @active;
+	cursor: pointer;
+
+	&:hover {
+		background-color: @cc;
+	}
+
+	&:disabled,
+	&.disabled {
+		opacity: 0.65;
+		cursor: not-allowed;
+	}
+}
+
+.magic3(@name, @normal: @primary,
+	 @hover: if(iscolor(@normal), if(lightness(@normal)>=80%, darken(@normal, 10%), if(lightness(@normal)<20%, lighten(@normal, 50%), lighten(@normal, 5%))), @normal), 
+	 @active: if(iscolor(@hover), if(lightness(@hover)>=80%, darken(@hover, 10%), if(lightness(@hover)<20%, lighten(@hover, 30%), lighten(@hover, 10%))), @hover)) {
+	@{name}: @normal;
+
+	&:hover {
+		@{name}: @hover;
+	}
+
+	&.active,
+	&:active {
+		@{name}: @active;
+	}
+}
+
+.background3(@rest...) {
+	.magic3(background, @rest...);
+}
+
+.background-color3(@rest...) {
+	.magic3(background-color, @rest...);
+}
+
+.color3(@rest...) {
+	.magic3(color, @rest...);
+}
+
+.border3(@rest...) {
+	border: 1px solid #000;
+	.magic3(border-color, @rest...);
+}
+
+.border-color3(@rest...) {
+	.magic3(border-color, @rest...);
+}
+//#endregion
+
+.loading(@t: 1.3s, @n: loading) {
+	@keyframes @n {
+		0% {
+			transform: rotate(0deg);
+		}
+
+		100% {
+			transform: rotate(360deg);
+		}
+	}
+
+	animation: @n @t linear infinite;
+}
+
+.clearfix() {
+	&::after,
+	&::before {
+		content: " ";
+		display: table;
+	}
+
+	&::after {
+		clear: both;
+	}
+}
+
+// Encoded SVG Background
+.encoded-svg-background(@svg) {
+	@url: `encodeURIComponent(@{svg}) `;
+
+	background-image: url("data:image/svg+xml;charset=utf-8,@{url}");
+}
+
+// Shadow
+.depth(@level: 1) {
+	& when (@level =1) {
+		box-shadow: rgba(0, 0, 0, 0.117647) 0 1px 0.375rem, rgba(0, 0, 0, 0.117647) 0 1px 0.25rem;
+	}
+
+	& when (@level =2) {
+		box-shadow: rgba(0, 0, 0, 0.156863) 0 0.188rem 0.625rem,
+			rgba(0, 0, 0, 0.227451) 0 0.188rem 0.625rem;
+	}
+
+	& when (@level =3) {
+		box-shadow: rgba(0, 0, 0, 0.188235) 0 0.625rem 1.875rem,
+			rgba(0, 0, 0, 0.227451) 0 0.375rem 0.625rem;
+	}
+
+	& when (@level =4) {
+		box-shadow: rgba(0, 0, 0, 0.247059) 0 0.875rem 2.813rem,
+			rgba(0, 0, 0, 0.219608) 0 0.625rem 1.125rem;
+	}
+
+	& when (@level =5) {
+		box-shadow: rgba(0, 0, 0, 0.298039) 0 1.188rem 3.75rem,
+			rgba(0, 0, 0, 0.219608) 0 0.938rem 1.25rem;
+	}
+}
+
+// No Scrollbar
+.no-scrollbar() {
+	&::-webkit-scrollbar {
+		display: none !important;
+		width: 0 !important;
+		height: 0 !important;
+		-webkit-appearance: none;
+		opacity: 0 !important;
+	}
+}
+
+// 滚动条
+.scroll-chrome(@size: 4px, @color: rgba(0, 0, 0, 0.2)) {
+	&::-webkit-scrollbar {
+		width: @size;
+		height: @size;
+	}
+	&::-webkit-scrollbar-thumb {
+		border-radius: @size;
+		// box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+		background: @color;
+		&:hover {
+			background: darken(@color, 10%);
+		}
+	}
+}
+.scroll(@size: 4px, @color: rgba(0, 0, 0, 0.2)) {
+	overflow: auto;
+	.scroll-chrome(@size, @color);
+}
+.scroll-x(@size: 4px, @color: rgba(0, 0, 0, 0.2)) {
+	overflow: auto hidden;
+	.scroll-chrome(@size, @color);
+}
+.scroll-y(@size: 4px, @color: rgba(0, 0, 0, 0.2)) {
+	overflow: hidden auto;
+	.scroll-chrome(@size, @color);
+}
+
+// 主内容区域，超过最大宽度两边留白
+.container() {
+	max-width: @container-width;
+	margin: auto;
+	padding: 0 12px;
+}
+
+.screen-large-than(@width, @rules) {
+	@media screen and (min-width: @width) {
+		@rules();
+	}
+}
+
+.screen-small-than(@width, @rules) {
+	@media screen and (max-width: @width) {
+		@rules();
+	}
+}
+
+.screen-tall-than(@height, @rules) {
+	@media screen and (min-height: @height) {
+		@rules();
+	}
+}
+
+.screen-short-than(@height, @rules) {
+	@media screen and (max-height: @height) {
+		@rules();
+	}
+}
+
+.auto(@key, @val) {
+	@{key}: @val / @design-width * 100vw;
+	.screen-large-than(@design-width, {
+		@{key}: @val;
+	});
+}
+
+.auto2(@key, @a, @b) {
+	@{key}: @a / @design-width * 100vw @b / @design-width * 100vw;
+	.screen-large-than(@design-width, {
+		@{key}: @a @b;
+	});
+}
+
+.auto-font-size(@min, @max) {
+	@a: (
+			@max + @min - (@max - @min) / (@design-width - @mobile-width) *
+				(@design-width + @mobile-width)
+		) / 2;
+	@b: (@max - @min) / (@design-width - @mobile-width) * 100vw;
+	font-size: calc(@a + @b);
+	.screen-large-than(@design-width, {
+		font-size: @max;
+	});
+	.screen-small-than(@mobile-width, {
+		font-size: @min;
+	});
+}
+
+.background-transparent() {
+	background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAxMCAxMCI+PHBhdGggZD0iTTAgMGg1djEwaDVWNUgweiIgZmlsbD0iI2NjYyIvPjxwYXRoIGQ9Ik0wIDV2NWg1VjBoNXY1eiIgZmlsbD0iI2ZmZiIvPjwvc3ZnPg==);
+}
+
+.dividing-line(@color: #333, @width: 25%) {
+	position: relative;
+	text-align: center;
+	&::before {
+		content: "";
+		position: absolute;
+		top: 50%;
+		right: 100%;
+		width: @width;
+		height: 1px;
+		background-color: @color;
+	}
+	&::after {
+		content: "";
+		position: absolute;
+		top: 50%;
+		left: 100%;
+		width: @width;
+		height: 1px;
+		background-color: @color;
+	}
+}

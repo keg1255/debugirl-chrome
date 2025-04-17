@@ -1,0 +1,13 @@
+diff --git a/node_modules/@crxjs/vite-plugin/dist/index.mjs b/node_modules/@crxjs/vite-plugin/dist/index.mjs
+index 4f26850..9fcd634 100644
+--- a/node_modules/@crxjs/vite-plugin/dist/index.mjs
++++ b/node_modules/@crxjs/vite-plugin/dist/index.mjs
+@@ -284,7 +284,7 @@ const pluginBackground = () => {
+         if (id === workerClientId) {
+           const base = `http://localhost:${config.server.port}/`;
+           return defineClientValues(
+-            workerHmrClient.replace("__BASE__", JSON.stringify(base)),
++            workerHmrClient.replace("__BASE__", JSON.stringify(base)).replace('url.origin === ownOrigin', 'url.origin === ownOrigin && !/__code__/.test(url.pathname)'),
+             config
+           );
+         }

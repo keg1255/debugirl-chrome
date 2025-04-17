@@ -1,0 +1,178 @@
+{
+  "template": {
+    "scope": "vue",
+    "prefix": "template",
+    "body": [
+      "<template>",
+      "\t<${1:div} class=\"${2:${TM_DIRECTORY/[^]*[\\\\\\/]//g}}${TM_FILENAME_BASE/([A-Z]|^\\w)/-${1:/downcase}/g}\">",
+      "\t\t$0",
+      "\t</$1>",
+      "</template>",
+      "<script>",
+      "export default {",
+      "\tname: \"${TM_FILENAME_BASE/(^|-)(\\w)/${2:/upcase}/g}\",",
+      "\tcomponents: {},",
+      "\tprops: {",
+      "\t\tname: String,",
+      "\t},",
+      "\tdata() {",
+      "\t\treturn {};",
+      "\t},",
+      "\tcomputed: {},",
+      "\tmounted() {},",
+      "\tmethods: {},",
+      "};",
+      "</script>",
+      "<style lang=\"less\">",
+      "@import \"~@/styles/define.less\";",
+      ".${2}${TM_FILENAME_BASE/([A-Z]|^\\w)/-${1:/downcase}/g} {",
+      "\t",
+      "}",
+      "</style>",
+      ""
+    ],
+    "description": "self template"
+  },
+  "ifdef": {
+    "scope": "javascript,typescript,less,css",
+    "prefix": "ifdef",
+    "body": [
+      "// #if${1:n}def ${2|ELECTRON,DEV,H5|}",
+      "$0",
+      "// #endif"
+    ],
+    "description": "nuxt ifdef"
+  },
+  "v-for": {
+    "prefix": "v-for",
+    "body": [
+      "v-for=\"(${2:item},i) in ${1:rows}\" :key=\"i\""
+    ],
+    "scope": "vue-html"
+  },
+  "ifdef-html": {
+    "scope": "vue,vue-html",
+    "prefix": "ifdef",
+    "body": [
+      "<!-- #ifdef ELECTRON -->",
+      "$1",
+      "<!-- #endif -->"
+    ]
+  },
+  "head": {
+    "scope": "javascript",
+    "prefix": "head",
+    "body": [
+      "head() {",
+      "\treturn {",
+      "\t\ttitle: \"一键远控title\",",
+      "\t\tmeta: [",
+      "\t\t\t{charset: \"utf-8\"},",
+      "\t\t\t{",
+      "\t\t\t\thid: \"description\",",
+      "\t\t\t\tname: \"description\",",
+      "\t\t\t\tcontent: \"一键远控description\",",
+      "\t\t\t},",
+      "\t\t\t{",
+      "\t\t\t\thid: \"keywords\",",
+      "\t\t\t\tname: \"keywords\",",
+      "\t\t\t\tcontent: \"一键远控keywords\",",
+      "\t\t\t},",
+      "\t\t],",
+      "\t};",
+      "},"
+    ]
+  },
+  "template-v3": {
+    "prefix": "template-v3",
+    "body": [
+      "<template>",
+      "\t<${1:div} class=\"${2:${TM_DIRECTORY/[^]*[\\\\\\/]//g}}${TM_FILENAME_BASE/([A-Z]|^\\w)/-${1:/downcase}/g}\">",
+      "\t\t$0",
+      "\t</$1>",
+      "</template>",
+      "<script setup>",
+      "import {onMounted} from \"vue\";",
+      "const props = defineProps({",
+      "\tdata: Object,",
+      "});",
+      "",
+      "// Methods",
+      "",
+      "// Lifecycle",
+      "onMounted(() => {",
+      "\t",
+      "});",
+      "</script>",
+      "<style lang=\"less\">",
+      "@import \"~@/styles/define.less\";",
+      ".${2}${TM_FILENAME_BASE/([A-Z]|^\\w)/-${1:/downcase}/g} {",
+      "\t",
+      "}",
+      "</style>",
+      ""
+    ],
+    "description": "self template",
+    "scope": "vue"
+  },
+  "i-svg": {
+    "prefix": "i-svg",
+    "body": [
+      "<i-svg name=\"$1\" />"
+    ],
+    "scope": "vue-html"
+  },
+  "html ifdef": {
+    "prefix": "ifdef",
+    "body": [
+      "<!-- #if${1:n}def ${2|ELECTRON,DEV,H5|} -->",
+      "$0",
+      "<!-- #endif -->"
+    ],
+    "description": "nuxt ifdef",
+    "scope": "vue-html,html"
+  },
+  "dialog": {
+    "scope": "vue",
+    "prefix": "dialog",
+    "description": "弹窗组件",
+    "body": [
+      "<template>",
+      "\t<hd-dialog-center @close=\"\\$emit('close')\">",
+      "\t\t<${1:div} class=\"${2:${TM_DIRECTORY/[^]*[\\\\\\/]//g}}${TM_FILENAME_BASE/([A-Z]|^\\w)/-${1:/downcase}/g}\">",
+      "\t\t\t$0",
+      "\t\t</$1>",
+      "\t</hd-dialog-center>",
+      "</template>",
+      "<script>",
+      "export default {",
+      "\tname: \"${TM_FILENAME_BASE/(^|-)(\\w)/${2:/upcase}/g}\",",
+      "\tcomponents: {},",
+      "\tprops: {",
+      "\t\tname: String,",
+      "\t},",
+      "\tdata() {",
+      "\t\treturn {};",
+      "\t},",
+      "\tcomputed: {},",
+      "\tmounted() {},",
+      "\tmethods: {},",
+      "};",
+      "</script>",
+      "<style lang=\"less\">",
+      "@import \"~@/styles/define.less\";",
+      ".${2}${TM_FILENAME_BASE/([A-Z]|^\\w)/-${1:/downcase}/g} {",
+      "\t",
+      "}",
+      "</style>",
+      ""
+    ]
+  },
+  "today": {
+    "scope": "javascript,typescript",
+    "prefix": "today",
+    "body": [
+      "let today = new Date().setHours(0, 0, 0, 0);"
+    ]
+  }
+}

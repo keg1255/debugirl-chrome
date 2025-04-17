@@ -1,0 +1,7 @@
+dist
+node_modules
+static
+public
+assets
+*.d.ts
+*.min.js

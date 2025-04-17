@@ -1,0 +1,31 @@
+root = true
+
+[*]
+charset = utf-8
+indent_style = tab
+indent_size = 2
+end_of_line = lf
+
+[*.json]
+indent_style = space
+indent_size = 2
+
+[*.yml]
+indent_style = space
+indent_size = 2
+
+[*.yaml]
+indent_style = space
+indent_size = 2
+
+[*.bat]
+charset = gbk
+end_of_line = crlf
+
+[*.nsi]
+charset = gbk
+end_of_line = crlf
+
+[*.ini]
+charset = gbk
+end_of_line = crlf

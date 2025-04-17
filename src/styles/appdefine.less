@@ -1,0 +1,121 @@
+@import "./variables.less";
+
+// 项目相关样式
+
+.gray-border-btn() {
+	background: #f4f8ff;
+	border: 1px solid #d2ddf1;
+	color: #55587d;
+	&.active,
+	&:active {
+		background: #eaf1fd;
+		border: 1px solid @primary;
+		color: @primary;
+	}
+}
+
+.plain-gray2-btn() {
+	color: #7f81a3;
+	cursor: pointer;
+	&:hover {
+		color: #a4a7c8;
+	}
+	&.active,
+	&:active {
+		color: #595c80;
+	}
+}
+
+.plain-gray-btn() {
+	color: #24263e;
+	cursor: pointer;
+	&:hover {
+		color: #6b6f9c;
+	}
+	&.active,
+	&:active {
+		color: #47496b;
+	}
+}
+
+.gray-primary-btn() {
+	color: #555c78;
+	cursor: pointer;
+	&:hover {
+		color: #1961fe;
+	}
+	&.active,
+	&:active {
+		color: #0a51eb;
+	}
+}
+
+.primary-btn() {
+	color: #fff;
+	box-shadow: 0px 4px 4px 0px rgba(28, 78, 255, 0.29);
+	border-color: #1961fe;
+	background-color: #1961fe;
+	&:hover {
+		box-shadow: 0px 4px 4px 0px rgba(25, 130, 254, 0.29);
+		border-color: #1982fe;
+		background-color: #1982fe;
+	}
+
+	&.active,
+	&:active {
+		box-shadow: 0px 4px 4px 0px rgba(10, 81, 235, 0.29);
+		border-color: #0a51eb;
+		background-color: #0a51eb;
+	}
+	&:disabled {
+		background: #a4a7c8;
+		box-shadow: none;
+		opacity: 1;
+	}
+}
+
+.primary-btn1() {
+	color: #fff;
+	border-color: #1961fe;
+	background-color: #1961fe;
+	&:hover {
+		border-color: #1982fe;
+		background-color: #1982fe;
+	}
+
+	&.active,
+	&:active {
+		border-color: #0a51eb;
+		background-color: #0a51eb;
+	}
+	&:disabled {
+		background: #9a9dbf;
+		box-shadow: none;
+		opacity: 1;
+	}
+}
+
+.plain-primary-btn() {
+	color: #24263e;
+	&:hover {
+		color: #0337a8;
+	}
+
+	&.active,
+	&:active {
+		color: @primary;
+	}
+}
+
+.vipbuy-btn() {
+	color: #322000;
+	background: linear-gradient(270deg, #edc278 0%, #f5deb5 100%);
+	&:hover {
+		color: #322000;
+		background: linear-gradient(270deg, #ffdb9d 0%, #ffe1ac 100%);
+	}
+	&:active {
+		color: #322000;
+		background: linear-gradient(270deg, #e9bb6e 0%, #efd29f 100%);
+	}
+}
