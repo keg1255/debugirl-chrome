@@ -28,7 +28,7 @@ export default class ChromeTab {
     /**
      * 等待第一个匹配的元素出现, 有高度则认为出现
      * @param {string} selector
-     * @param {number} [timeout] 等待超时时间
+     * @param {number} [timeout=0] 等待超时时间
      */
     waitSelector(selector: string, timeout?: number): Promise<any>;
     /**
@@ -49,19 +49,19 @@ export default class ChromeTab {
     /**
      * 等待文字出现
      * @param {string} text
-     * @param {number} [timeout]
+     * @param {number} [timeout=0]
      */
     waitText(text: string, timeout?: number): Promise<any>;
     /**
      * 等待元素出现, 有文本则认为出现
      * @param {string} selector
-     * @param {number} [timeout]
+     * @param {number} [timeout=0]
      */
     waitSelectorText(selector: string, timeout?: number): Promise<any>;
     /**
      * 等待任意一个匹配的元素出现, 有宽度则认为出现
      * @param {string} selector
-     * @param {number} [timeout]
+     * @param {number} [timeout=0]
      */
     waitSelectorAny(selector: string, timeout?: number): Promise<any>;
     /**
