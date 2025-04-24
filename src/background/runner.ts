@@ -100,9 +100,9 @@ export function startLoop() {
 	const now = Date.now();
 	let errorCount = 0;
 	scripts.list.forEach((script) => {
+		if (!script.autorun) return;
 		if (script.result?.class == "error") errorCount++;
 		if (runningSet.has(script.id)) return;
-		if (!script.autorun) return;
 		let next_at = Math.max(
 			(+script.run_at || 0) + (+script.freq || 300) * 1000,
 			+script.next_at || 0
