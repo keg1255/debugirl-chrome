@@ -97,8 +97,9 @@ export const whenReady = ready.then(() => {
 		if (["local-write", "sync-write", "share-write"].indexOf(evt.type) >= 0) {
 			const def = storages[evt.key];
 			for (let k in def) {
-				let v = evt.data[k];
-				if (v != null) def[k] = v;
+				if (k in evt.data) {
+					def[k] = evt.data[k];
+				}
 			}
 			sendResponse(0);
 			chrome.runtime.sendMessage({
