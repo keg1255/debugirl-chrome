@@ -1,3 +1,5 @@
+/// <reference types="@types/chrome" />
+/// <reference types="@types/chrome" />
 export interface MouseEventParams {
     /** 鼠标事件类型 */
     type?: "mousePressed" | "mouseReleased" | "mouseMoved" | "mouseWheel" | "click" | "path";

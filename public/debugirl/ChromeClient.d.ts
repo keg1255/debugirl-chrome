@@ -1,3 +1,4 @@
+/// <reference types="@types/chrome" />
 import { Chrome, KeyboardEventParams, MouseEventParams } from "./types";
 import ChromeTab from "./ChromeTab";
 interface RequestResponse {

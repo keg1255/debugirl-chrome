@@ -228,6 +228,7 @@ addChromeApi("chrome.dispatch", async function (tabId: number, params: any) {
 		}
 		if (params.type == "click") {
 			await emit("mousePressed");
+			await sleep(randN(100));
 			await emit("mouseReleased");
 			return;
 		}
