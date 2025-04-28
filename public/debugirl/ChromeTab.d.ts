@@ -9,6 +9,7 @@ export default class ChromeTab {
     /** @deprecated 内部使用 */
     wait_close: IPromise<void>;
     tab?: chrome.tabs.Tab;
+    name?: string;
     constructor(opt: {
         client: ChromeClient;
         tab: chrome.tabs.Tab;
@@ -77,10 +78,21 @@ export default class ChromeTab {
      */
     input(selector: string, value: string | number): Promise<any>;
     /**
+     * 用键盘输入
+     * @param {string} selector
+     * @param {string|number} value
+     */
+    keyboardInput(selector: string, value: string | number): Promise<void>;
+    /**
      * 点击元素
      * @param {string} selector
      */
     click(selector: string): Promise<any>;
+    /**
+     * 用鼠标点击坐标
+     * @param {Point} point
+     */
+    clickPoint(point: Point): Promise<void>;
     /**
      * 点击所有匹配的元素
      * @param {string} selector

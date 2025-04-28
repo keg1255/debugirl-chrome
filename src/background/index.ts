@@ -1,9 +1,9 @@
 import storages from "~/common/storages";
-import {debounce, formatError} from "@/common/utils";
+import {debounce, formatError, getDistance, randN, sleep} from "@/common/utils";
 import {newClient} from "./ws_client";
 import {addChromeApi} from "./chrome_runner";
 import {Buffer} from "buffer";
-import {waitGone, waitLoaded} from "~/common/chrome";
+import {waitGone, waitLoaded, waitRemoved} from "~/common/chrome";
 import {startLoop} from "./runner";
 import config from "~/lib/config";
 
@@ -149,6 +149,124 @@ addChromeApi("chrome.setUUID", async function (uuid) {
 addChromeApi("chrome.getUUID", async function () {
 	return store.uuid;
 });
+
+interface TabState {
+	point: Point;
+	count: number;
+	pms: Promise<any>;
+}
+const tabsMap = new Map<number, TabState>();
+addChromeApi("chrome.dispatch", async function (tabId: number, params: any) {
+	return withDebugger(tabId, async (state) => {
+		const target = {tabId};
+		function getPoint() {
+			return {
+				x: isNaN(params.x) ? state.point.x : +params.x,
+				y: isNaN(params.y) ? state.point.y : +params.y,
+			};
+		}
+		function emit(type: string) {
+			return chrome.debugger.sendCommand(target, "Input.dispatchMouseEvent", {
+				clickCount: 1,
+				button: "left",
+				...params,
+				...getPoint(),
+				type,
+			});
+		}
+		if (typeof params == "string") {
+			let pms: Promise<any> = Promise.resolve();
+			for (let i = 0; i < params.length; i++) {
+				pms = pms.then(() =>
+					chrome.debugger.sendCommand(target, "Input.dispatchKeyEvent", {
+						type: "char",
+						text: params[i],
+					})
+				);
+			}
+			return pms;
+		}
+		if (/mouse/.test(params.type)) {
+			return chrome.debugger.sendCommand(target, "Input.dispatchMouseEvent", {
+				clickCount: 1,
+				button: "left",
+				...params,
+				...getPoint(),
+			});
+		}
+		if (params.type == "path") {
+			let point = getPoint();
+			let a = {
+				x: randN(point.x * 2),
+				y: randN(point.y * 2),
+			};
+			if (Math.random() < 0.5) a.x = 0;
+			else a.y = 0;
+			await move(a);
+			// console.log("move", a);
+			while (getDistance(a, point) > 3) {
+				let dx = point.x - a.x;
+				let dy = point.y - a.y;
+				dx = (dx > 4 ? 4 : dx < -4 ? -4 : 0) + randN(dx / 2);
+				dy = (dy > 4 ? 4 : dy < -4 ? -4 : 0) + randN(dy / 2);
+				a.x += dx;
+				a.y += dy;
+				await sleep(randN(100));
+				await move(a);
+				// console.log("move", a);
+			}
+			await sleep(100);
+			function move(a: Point) {
+				return chrome.debugger.sendCommand(target, "Input.dispatchMouseEvent", {
+					type: "mouseMoved",
+					x: a.x,
+					y: a.y,
+				});
+			}
+			params.type = "click";
+		}
+		if (params.type == "click") {
+			await emit("mousePressed");
+			await emit("mouseReleased");
+			return;
+		}
+		if ("x" in params) {
+			// move
+			state.point.x = params.x;
+			state.point.y = params.y;
+			return chrome.debugger.sendCommand(target, "Input.dispatchMouseEvent", {
+				type: "mouseMoved",
+				x: params.x,
+				y: params.y,
+			});
+		}
+		return chrome.debugger.sendCommand(target, "Input.dispatchKeyEvent", params);
+	});
+});
+
+function withDebugger(tabId: number, cb: (state: TabState) => Promise<any>) {
+	const target = {tabId};
+	if (!tabsMap.has(tabId)) {
+		tabsMap.set(tabId, {point: {x: randN(10), y: randN(100)}, count: 0, pms: Promise.resolve()});
+		waitRemoved(tabId).then(() => {
+			tabsMap.delete(tabId);
+		});
+	}
+	const state = tabsMap.get(tabId);
+	state.count++;
+	if (state.count == 1) {
+		state.pms = state.pms.then(() => chrome.debugger.attach(target, "1.3"));
+	}
+	return state.pms
+		.then(cb)
+		.catch(console.error)
+		.then(() => {
+			state.count--;
+			if (state.count == 0) {
+				return chrome.debugger.detach(target);
+			}
+		});
+}
 
 // 给其它网站调用
 chrome.runtime.onMessageExternal.addListener(async (message, sender, sendResponse) => {

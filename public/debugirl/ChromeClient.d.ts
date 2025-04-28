@@ -1,3 +1,4 @@
+import { Chrome, KeyboardEventParams, MouseEventParams } from "./types";
 import ChromeTab from "./ChromeTab";
 interface RequestResponse {
     status: number;
@@ -10,6 +11,7 @@ export default class ChromeClient {
     /** 只能获取debugirl创建的tab */
     tabs: ChromeTab[];
     private closes;
+    chrome: Chrome;
     private onCreated;
     /**
      * 处理消息
@@ -27,7 +29,7 @@ export default class ChromeClient {
      * 创建新 tab
      * @param {chrome.tabs.CreateProperties} [opt]
      */
-    newTab(opt: chrome.tabs.CreateProperties): Promise<ChromeTab>;
+    newTab(opt?: chrome.tabs.CreateProperties): Promise<ChromeTab>;
     /**
      * 获取指定 url 的所有 cookie
      * @param {string} url
@@ -64,6 +66,12 @@ export default class ChromeClient {
         timeout?: number;
     }): Promise<RequestResponse>;
     /**
+     * 发送事件
+     * @param tabId
+     * @param params
+     */
+    dispatch(tabId: number, params: string | MouseEventParams | KeyboardEventParams): Promise<void>;
+    /**
      * 显示通知
      * @param {string} msg
      */
@@ -83,5 +91,12 @@ export default class ChromeClient {
      * @param {string} [err]
      */
     close(err?: string): Promise<any[]>;
+    /**
+     * 查找指定 url 的 tab 如果未找到，则创建新的 tab 并打开指定 url
+     * @param {RegExp | string} regex
+     * @param {string} url
+     * @returns {Promise<ChromeTab>}
+     */
+    findOrNew(regex: RegExp | string, url: string): Promise<ChromeTab>;
 }
 export {};

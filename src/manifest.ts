@@ -59,7 +59,6 @@ export default defineManifest({
 		// 'identity',
 		// 'identity.email',
 		"offscreen",
-		"webRequest",
 		"declarativeNetRequest",
 	],
 	// chrome_url_overrides: {
