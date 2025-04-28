@@ -36,7 +36,6 @@ export const refreshUserInfo = onlyone(async function () {
 					if (url.endsWith("?")) url = url.slice(0, -1);
 					history.replaceState({}, "", url);
 				});
-		return false;
 	}
 	return apiGet("/users/whoami", null, {loading: false})
 		.then((x) => {
@@ -53,7 +52,7 @@ export const refreshUserInfo = onlyone(async function () {
 		})
 		.catch((e) => {
 			console.error(e);
-			if (e && e.code == 401) logout();
+			if (e && e.code == 401 && shareLocal.user) logout();
 			return false;
 		});
 });
