@@ -1,4 +1,5 @@
 import ChromeClient from "./ChromeClient";
+import { KeyboardEventParams, MouseEventParams } from "./types";
 export declare class BreakError extends Error {
     msg: string;
     constructor(msg: string);
@@ -77,6 +78,7 @@ export default class ChromeTab {
      * @param {string|number} value
      */
     input(selector: string, value: string | number): Promise<any>;
+    dispatch(params: string | MouseEventParams | KeyboardEventParams): Promise<void>;
     /**
      * 用键盘输入
      * @param {string} selector

@@ -260,7 +260,7 @@ function withDebugger(tabId: number, cb: (state: TabState) => Promise<any>) {
 			console.error(e);
 		})
 	);
-	return state.pms.then(cb).catch(console.error);
+	return state.pms.then(() => cb(state)).catch(console.error);
 }
 
 // 给其它网站调用
