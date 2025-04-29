@@ -1,4 +1,3 @@
-/// <reference types="@types/chrome" />
 import ChromeClient from "./ChromeClient";
 export declare class BreakError extends Error {
     msg: string;

@@ -153,7 +153,6 @@ addChromeApi("chrome.getUUID", async function () {
 
 interface TabState {
 	point: Point;
-	count: number;
 	pms: Promise<any>;
 }
 const tabsMap = new Map<number, TabState>();
@@ -249,25 +248,19 @@ addChromeApi("chrome.dispatch", async function (tabId: number, params: any) {
 function withDebugger(tabId: number, cb: (state: TabState) => Promise<any>) {
 	const target = {tabId};
 	if (!tabsMap.has(tabId)) {
-		tabsMap.set(tabId, {point: {x: randN(10), y: randN(100)}, count: 0, pms: Promise.resolve()});
+		tabsMap.set(tabId, {point: {x: randN(10), y: randN(100)}, pms: Promise.resolve()});
 		waitRemoved(tabId).then(() => {
 			tabsMap.delete(tabId);
 		});
 	}
 	const state = tabsMap.get(tabId);
-	state.count++;
-	if (state.count == 1) {
-		state.pms = state.pms.then(() => chrome.debugger.attach(target, "1.3"));
-	}
-	return state.pms
-		.then(cb)
-		.catch(console.error)
-		.then(() => {
-			state.count--;
-			if (state.count == 0) {
-				return chrome.debugger.detach(target);
-			}
-		});
+	state.pms = state.pms.then(() =>
+		chrome.debugger.attach(target, "1.3").catch((e) => {
+			if (/already attached/.test(e)) return;
+			console.error(e);
+		})
+	);
+	return state.pms.then(cb).catch(console.error);
 }
 
 // 给其它网站调用
