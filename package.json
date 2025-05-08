@@ -1,7 +1,7 @@
 {
   "name": "debugirl-chrome",
   "displayName": "调姬",
-  "version": "1.0.0",
+  "version": "1.0.5",
   "author": "inu1255",
   "description": "不止是调试,你的远程调用贤内助. no only debug, your remote call helper.",
   "type": "commonjs",
