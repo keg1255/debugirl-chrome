@@ -33,9 +33,9 @@ const initRunner = onlyone(async function () {
 	}
 	return runners.values().find((x) => x);
 });
-addChromeApi("chrome.runScript", async function ({name, code, url, data}) {
+addChromeApi("chrome.runScript", async function ({id, name, code, url, data}) {
 	console.log("runScript", name, data);
-	return initRunner().then((rpc) => rpc.call("runScript", {name, code, url, data}));
+	return initRunner().then((rpc) => rpc.call("runScript", {id, name, code, url, data}));
 });
 
 const tabListeners = new Set<(message: any) => void>();
