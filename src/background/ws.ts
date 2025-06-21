@@ -6,9 +6,11 @@ export function newWsClient(opt: {url: string; rpc: Rpc; onWs: (ws: WebSocket) =
 	const {url, rpc, onWs} = opt;
 	let stoped = false;
 	let restart_timer;
+	let pre_ws: WebSocket;
 	function start() {
 		if (stoped) return;
 		let ws = new WebSocket(url);
+		pre_ws = ws;
 		let ready = Promise.race([once(ws, "open"), once(ws, "error").then((x) => Promise.reject(x))]);
 		let send_at = 0;
 		ws.send = (function (fn) {
@@ -46,6 +48,7 @@ export function newWsClient(opt: {url: string; rpc: Rpc; onWs: (ws: WebSocket) =
 		}, 5e3);
 
 		function restart() {
+			if (pre_ws != ws) return;
 			clearInterval(timer);
 			clearTimeout(restart_timer);
 			if (stoped) return;
