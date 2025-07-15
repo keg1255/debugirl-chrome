@@ -12,6 +12,7 @@ export default class ChromeClient {
     tabs: ChromeTab[];
     private closes;
     chrome: Chrome;
+    loadError?: (tab: ChromeTab) => Promise<void>;
     private onCreated;
     /**
      * 处理消息
@@ -71,6 +72,7 @@ export default class ChromeClient {
      * @param params
      */
     dispatch(tabId: number, params: string | MouseEventParams | KeyboardEventParams): Promise<void>;
+    clearSiteData(url: string): Promise<void>;
     /**
      * 显示通知
      * @param {string} msg

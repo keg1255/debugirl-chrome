@@ -8,7 +8,7 @@ import {createRouter, createWebHashHistory} from "vue-router";
 import Layout from "~/layouts/default.vue";
 import {waitLocals} from "~/common/utils/vuetool";
 import {refreshUserInfo} from "~/stores/actions";
-import {local} from "~/stores/local";
+import {local, shareLocal} from "~/stores/local";
 import app from "~/stores/app";
 import {isMacos, isMobile} from "~/common/utils";
 
@@ -20,7 +20,7 @@ export function createPage(routes: any[]) {
 		const win: any = window;
 		win.app = app;
 		win.local = local;
-		refreshUserInfo();
+		if (shareLocal.user) refreshUserInfo();
 		setInterval(() => {
 			app.tick = Math.floor(Date.now() / 1000) * 1e3;
 		}, 1e3);

@@ -11,6 +11,7 @@ export default class ChromeTab {
     wait_close: IPromise<void>;
     tab?: chrome.tabs.Tab;
     name?: string;
+    loadError: () => Promise<void>;
     constructor(opt: {
         client: ChromeClient;
         tab: chrome.tabs.Tab;
@@ -37,7 +38,7 @@ export default class ChromeTab {
      * 获取元素 value 属性
      * @param {string} selector
      */
-    getValue(selector: string): Promise<any>;
+    getValue(selector: string): Promise<string>;
     /**
      * 判断元素 value 属性是否为空
      * @param {string} selector
@@ -95,6 +96,7 @@ export default class ChromeTab {
      * @param {Point} point
      */
     clickPoint(point: Point): Promise<void>;
+    clearSiteData(url?: string): Promise<void>;
     /**
      * 点击所有匹配的元素
      * @param {string} selector
@@ -145,17 +147,15 @@ export default class ChromeTab {
      */
     clearCookies(url?: string): Promise<void>;
     /**
-     * 获取所有 frame, 默认只获取子页面且 url 不为 about:blank 的 frame
-     * @param {boolean} [all] 是否获取所有 frame
+     * 获取所有 iframe
      */
-    getFrames(all?: boolean): Promise<ChromeTab[]>;
+    getFrames(): Promise<ChromeTab[]>;
     /**
      * 查找第一个满足条件的 frame
-     * @template T
-     * @param {(x: ChromeTab) => Promise<T>} fn
-     * @returns {Promise<T>}
+     * @param {(x: ChromeTab) => any} fn
+     * @returns {Promise<ChromeTab>}
      */
-    findFrame<T>(fn: (x: ChromeTab) => Promise<T>): Promise<T>;
+    findFrame(fn: (x: ChromeTab) => any): Promise<ChromeTab>;
     /**
      * 加载 url
      * @param {string} url
@@ -195,6 +195,10 @@ export default class ChromeTab {
         check: () => any;
         /** 处理函数 */
         handler: () => Promise<any>;
+        /** 频率, 单位毫秒 */
+        freq?: number;
+        /** 上次执行时间 */
+        run_at?: number;
     }[]): Promise<any>;
     /**
      * 获取当前 url

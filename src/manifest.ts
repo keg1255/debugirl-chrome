@@ -61,6 +61,8 @@ export default defineManifest({
 		// 'identity.email',
 		"offscreen",
 		"declarativeNetRequest",
+		"webRequest",
+		"proxy",
 	],
 	// chrome_url_overrides: {
 	//   newtab: 'newtab.html',

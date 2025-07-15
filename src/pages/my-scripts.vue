@@ -211,7 +211,7 @@ async function add(data) {
 					await run1({
 						id: data.id || 0,
 						name: body.name || "测试",
-						code: body.code,
+						code: body.code.replace(/(\smain\([^\)]*\)\s*\{)/, "$1debugger;"),
 					});
 				},
 			},
@@ -560,6 +560,15 @@ onMounted(() => {
 	.body-result {
 		font-size: 12px;
 		cursor: pointer;
+		word-break: keep-all;
+		> span {
+			display: inline-block;
+		}
+		> * {
+			max-width: 250px;
+			max-height: 100px;
+			.scroll-y;
+		}
 		.error {
 			color: @error;
 		}

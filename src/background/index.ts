@@ -245,6 +245,38 @@ addChromeApi("chrome.dispatch", async function (tabId: number, params: any) {
 	});
 });
 
+interface AuthCredential {
+	[key: string]: {username: string; password: string};
+}
+const authCredentialsMap: AuthCredential = {};
+chrome.webRequest.onAuthRequired.addListener(
+	function (details) {
+		console.log("Authentication required for proxy:", details);
+		// 检查是否是代理认证 (statusCode 407)
+		if (details.isProxy && details.statusCode === 407) {
+		}
+	},
+	{
+		urls: ["<all_urls>"],
+	},
+	["blocking"]
+);
+addChromeApi(
+	"chrome.setProxy",
+	async function (pac: string | ((url, host) => string), authMap: AuthCredential) {
+		if (authMap) Object.assign(authCredentialsMap, authMap);
+		await chrome.proxy.settings.set({
+			scope: "regular",
+			value: {
+				mode: "pac_script",
+				pacScript: {
+					data: `function FindProxyForURL(url,host){return (${pac}).apply(this,arguments)}`,
+				},
+			},
+		});
+	}
+);
+
 function withDebugger(tabId: number, cb: (state: TabState) => Promise<any>) {
 	const target = {tabId};
 	if (!tabsMap.has(tabId)) {

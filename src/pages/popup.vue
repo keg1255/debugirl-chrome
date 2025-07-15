@@ -16,9 +16,9 @@
 						<td>
 							<input
 								:value="item.url"
-								@change="changeUrl(item, $event)"
 								type="text"
 								placeholder="请输入websocket地址"
+								@change="changeUrl(item, $event)"
 							/>
 						</td>
 						<td>{{ item.status }}</td>
