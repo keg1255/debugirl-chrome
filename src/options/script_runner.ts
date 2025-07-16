@@ -87,7 +87,7 @@ export function runScript(opt: {
 						.catch(reject);
 					return;
 				}
-				if (path == "keepalive") {
+				if (path == "keepAlive") {
 					clearTimeout(timer);
 					timer = setTimeout(() => {
 						reject("timeout");
