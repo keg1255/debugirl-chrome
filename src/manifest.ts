@@ -59,6 +59,7 @@ export default defineManifest({
 		"scripting",
 		// 'identity',
 		// 'identity.email',
+		"browsingData",
 		"offscreen",
 		"declarativeNetRequest",
 		"webRequest",
