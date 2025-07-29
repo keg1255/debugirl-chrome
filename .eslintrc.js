@@ -26,7 +26,6 @@ const RULES = {
 	"no-throw-literal": 0,
 	"prefer-rest-params": 0,
 	"no-template-curly-in-string": 0,
-	"no-use-before-define": ["error", {functions: false, classes: false}],
 	"no-else-return": ["error", {allowElseIf: false}],
 	"import/order": 0,
 	"new-cap": 0,
@@ -34,10 +33,6 @@ const RULES = {
 	// typescript
 	"@typescript-eslint/explicit-module-boundary-types": 0,
 	"@typescript-eslint/no-explicit-any": 0,
-	"@typescript-eslint/no-use-before-define": [
-		"error",
-		{functions: false, classes: false, typedefs: false},
-	],
 	"@typescript-eslint/no-unused-vars": ["warn", {args: "none", varsIgnorePattern: "^_"}],
 	"@typescript-eslint/no-empty-function": [1, {allow: ["methods"]}],
 	"@typescript-eslint/no-namespace": 0,
@@ -87,6 +82,7 @@ module.exports = {
 		win: "readonly",
 		keepAlive: "readonly",
 		makeCode: "readonly",
+		defineStore: "readonly",
 		getStore: "readonly",
 		setStore: "readonly",
 		setNextAt: "readonly",

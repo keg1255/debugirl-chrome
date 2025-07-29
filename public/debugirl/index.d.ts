@@ -7,10 +7,16 @@ declare global {
      */
     function keepAlive(timeout: number): Promise<void>;
     /**
+     * 定义存储
+     */
+    function defineStore<T>(def: T): Promise<T>;
+    /**
+     * @deprecated 请使用 defineStore 代替
      * 获取存储
      */
     function getStore<T>(def: T): Promise<T>;
     /**
+     * @deprecated 请使用 defineStore 代替
      * 设置存储
      * @param {any} value
      */
