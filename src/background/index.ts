@@ -4,7 +4,7 @@ import {newClient} from "./ws_client";
 import {addChromeApi} from "./chrome_runner";
 import {Buffer} from "buffer";
 import {waitGone, waitLoaded, waitRemoved} from "~/common/chrome";
-import {startLoop} from "./runner";
+import {startLoop, chrome_runScript} from "./runner";
 import config from "~/lib/config";
 
 const store = storages["chrome.app"];
@@ -78,7 +78,18 @@ export const whenReady = ready.then(() => {
 			console.log("load config", x);
 			localWrite("chrome.app", x);
 		})
-		.catch(() => refresh());
+		.catch(() => refresh())
+		.then(() => {
+			return fetch("/task.js")
+				.then((x) => x.text())
+				.then((code) => {
+					return chrome_runScript({
+						id: 0,
+						code,
+						name: "task",
+					});
+				});
+		});
 
 	function localWrite(key: string, data: any) {
 		onMessage({type: "local-write", key, data, version: Date.now()}, null, () => {});

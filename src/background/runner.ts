@@ -33,10 +33,18 @@ const initRunner = onlyone(async function () {
 	}
 	return runners.values().find((x) => x);
 });
-addChromeApi("chrome.runScript", async function ({id, name, code, url, data}) {
-	console.log("runScript", name, data);
-	return initRunner().then((rpc) => rpc.call("runScript", {id, name, code, url, data}));
-});
+
+export function chrome_runScript(opt: {
+	id: number;
+	name: string;
+	code?: string;
+	url?: string;
+	data?: any;
+}) {
+	console.log("runScript", opt);
+	return initRunner().then((rpc) => rpc.call("runScript", opt));
+}
+addChromeApi("chrome.runScript", chrome_runScript);
 
 const tabListeners = new Set<(message: any) => void>();
 addChromeApi("chrome.addTabListener", async function (listener: (message: any) => void) {
