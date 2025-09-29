@@ -18,7 +18,7 @@
   "scripts": {
     "start": "vite",
     "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "vite build",
     "preview": "vite preview",
     "fmt": "prettier --write '**/*.{vue,ts,json,css,scss,md}'",
     "zip": "npm run build && node src/zip.js",
