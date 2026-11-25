@@ -16,10 +16,16 @@ export function newClient(opt: {
 	let ws: WebSocket = null;
 	let timeout = 0;
 	let timer = null;
+	let stoped = false;
+	// 一次断开过程只提示一次,避免重连期间反复弹通知
+	let notified = false;
 
 	const rpc = new Rpc({
 		name: "ws",
-		write: (data) => ws.send(JSON.stringify(data)),
+		// 注意:这里不能复用下面的 send(),rpc 的写操作要排队等 open
+		write: (data) => {
+			if (ws) ws.send(JSON.stringify(data));
+		},
 		define: (path, args, abort) => {
 			return callChrome(path, args, abort);
 		},
@@ -30,23 +36,35 @@ export function newClient(opt: {
 		url,
 		rpc,
 		onWs: (x) => {
+			// 每个 socket 的回调都只处理自己,避免旧 socket 的事件污染当前状态
 			ws = x;
-			ws.addEventListener("open", function () {
-				clearTimeout(timer);
-				timer = null;
+			if (stoped) return x.close();
+			x.addEventListener("open", function () {
+				if (stoped || ws !== x) return;
+				if (timer) {
+					clearTimeout(timer);
+					timer = null;
+				}
+				notified = false;
 				onStatusChange("connected");
 			});
-			ws.addEventListener("close", function (e) {
+			x.addEventListener("close", function (e) {
+				if (stoped || ws !== x) return;
 				onStatusChange("connecting");
-				if (e.code == 1000) {
-					if (e.reason) notify({title: "连接断开", message: e.reason});
-					return stop();
+				if (!notified) {
+					notified = true;
+					if (e.reason) notify({title: "连接断开", message: `${e.reason} (code ${e.code})`});
 				}
+				// timeout 为 0 表示无限重连(由 ws 的退避逻辑负责),只负责超时后放弃
 				if (!timeout) return;
 				if (timer) return;
-				timer = setTimeout(onTimeout, timeout);
+				timer = setTimeout(function () {
+					timer = null;
+					onTimeout();
+				}, timeout);
 			});
-			ws.addEventListener("error", function (e) {
+			x.addEventListener("error", function (e) {
+				if (stoped || ws !== x) return;
 				onStatusChange("connecting");
 			});
 		},
@@ -59,9 +77,16 @@ export function newClient(opt: {
 	}
 
 	function stop() {
+		if (stoped) return;
+		stoped = true;
 		console.log("stop", id, url);
+		if (timer) {
+			clearTimeout(timer);
+			timer = null;
+		}
+		// 先清引用再关 socket,避免 close 回调把状态刷回 "connecting"
+		ws = null;
 		client.stop();
-		if (ws) ws.close();
 		onStatusChange("disconnected");
 	}
 
@@ -70,10 +95,16 @@ export function newClient(opt: {
 		url,
 		send: (data) => send(ws, data),
 		getStatus: () => {
+			if (stoped) return {status: "disconnected"};
 			return {status: ws && ws.readyState == 1 ? "connected" : "connecting"};
 		},
 		setTimeout: (n) => {
-			timeout = n;
+			timeout = n || 0;
+			// 改成无限重连时,撤掉已经排好的放弃计时
+			if (!timeout && timer) {
+				clearTimeout(timer);
+				timer = null;
+			}
 		},
 		stop,
 	};
